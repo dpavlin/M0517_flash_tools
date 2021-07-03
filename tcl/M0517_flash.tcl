@@ -42,7 +42,7 @@ proc FlashAprom { Filename } {
 
 	set BUF_SIZE [expr $SRAM_SEK*512]
 
-	set f_size [expr [lindex [ocd_test_image $Filename $fl_base_adr] 3]]
+	set f_size [expr [file size $Filename]]
 	set f_type [getFileType $Filename]
 	set f_35k [expr ($f_size / $BUF_SIZE)]
 	set f_05k [expr ($f_size % $BUF_SIZE)]
@@ -61,7 +61,7 @@ proc FlashAprom { Filename } {
 	reg pc 0x20000000
    	resume
    	wait_halt
-	set r0 [expr [lindex [ocd_reg 0] 2]]
+	set r0 [expr [lindex [reg 0] 2]]
 	if { $r0 != 0 } { 
 		puts "ERROR:: Not able to unlock"
 	} 
@@ -83,7 +83,7 @@ proc FlashAprom { Filename } {
 	resume
 	wait_halt
 	
-	set r0 [expr [lindex [ocd_reg 0] 2]]
+	set r0 [expr [lindex [reg 0] 2]]
 	if { $r0 != 0 } { 
 		puts "ERROR:: Not able to erease"
 	} 
@@ -125,7 +125,7 @@ proc FlashAprom { Filename } {
 		resume
 		 
 		wait_halt
-		set r0 [expr [lindex [ocd_reg 0] 2]]
+		set r0 [expr [lindex [reg 0] 2]]
 		if { $r0 != 0 } { 
 			puts "ERROR:: FlashImage"
 		} 
